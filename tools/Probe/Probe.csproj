@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- 命令行探查与回归测试工具：直接编译插件的读取/解析代码，不依赖 STranslate -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\..\src\STranslate.Plugin.Translate.LocalDict\Mdict\*.cs" />
+    <Compile Include="..\..\src\STranslate.Plugin.Translate.LocalDict\Core\*.cs" />
+    <PackageReference Include="HtmlAgilityPack" Version="1.12.4" />
+  </ItemGroup>
+</Project>

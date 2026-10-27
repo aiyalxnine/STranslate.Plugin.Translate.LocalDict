@@ -1,0 +1,32 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <sys:String x:Key="STranslate_Plugin_Translate_LocalDict_Dictionaries">词库</sys:String>
+    <sys:String x:Key="STranslate_Plugin_Translate_LocalDict_DictionariesDesc">按列表顺序查询已启用的 MDX 词库；同一文件夹里的同名 .mdd 会自动作为发音库</sys:String>
+    <sys:String x:Key="STranslate_Plugin_Translate_LocalDict_Add">添加 MDX 词库</sys:String>
+    <sys:String x:Key="STranslate_Plugin_Translate_LocalDict_Empty">还没有添加词库。点击右上方按钮，选择 .mdx 文件即可（文件不会被复制或修改）。</sys:String>
+    <sys:String x:Key="STranslate_Plugin_Translate_LocalDict_On">启用</sys:String>
+    <sys:String x:Key="STranslate_Plugin_Translate_LocalDict_Off">禁用</sys:String>
+    <sys:String x:Key="STranslate_Plugin_Translate_LocalDict_Enabled">启用</sys:String>
+    <sys:String x:Key="STranslate_Plugin_Translate_LocalDict_MoveUp">上移</sys:String>
+    <sys:String x:Key="STranslate_Plugin_Translate_LocalDict_MoveDown">下移</sys:String>
+    <sys:String x:Key="STranslate_Plugin_Translate_LocalDict_Remove">从列表移除（不删除文件）</sys:String>
+    <sys:String x:Key="STranslate_Plugin_Translate_LocalDict_ShowEnglish">显示英文释义</sys:String>
+    <sys:String x:Key="STranslate_Plugin_Translate_LocalDict_ShowEnglishDesc">英汉双解词库在中文释义后附上英文原文释义</sys:String>
+    <sys:String x:Key="STranslate_Plugin_Translate_LocalDict_ShowPhrasalVerbs">显示短语动词列表</sys:String>
+    <sys:String x:Key="STranslate_Plugin_Translate_LocalDict_MaxExamples">例句数量</sys:String>
+    <sys:String x:Key="STranslate_Plugin_Translate_LocalDict_MaxExamplesDesc">每次查询最多显示的例句条数（优先每个义项各取一句）</sys:String>
+    <sys:String x:Key="STranslate_Plugin_Translate_LocalDict_About">说明</sys:String>
+    <sys:String x:Key="STranslate_Plugin_Translate_LocalDict_AboutContent">词条全部在本机读取，不联网。查不到原词时会尝试还原词形（running → run）并查找短语动词（look up）。音标旁的喇叭按钮通过仅本机可访问的 127.0.0.1 端口播放 .mdd 中的真人发音。</sys:String>
+    <sys:String x:Key="STranslate_Plugin_Translate_LocalDict_NoDictionary">尚未添加词库：请在本插件的设置中添加 MDX 文件</sys:String>
+    <sys:String x:Key="STranslate_Plugin_Translate_LocalDict_PhrasalVerbs">短语动词</sys:String>
+    <sys:String x:Key="STranslate_Plugin_Translate_LocalDict_Loading">正在载入…</sys:String>
+    <sys:String x:Key="STranslate_Plugin_Translate_LocalDict_EntryCount">{0:N0} 个词条</sys:String>
+    <sys:String x:Key="STranslate_Plugin_Translate_LocalDict_WithAudio">发音资源 {0:N0} 个</sys:String>
+    <sys:String x:Key="STranslate_Plugin_Translate_LocalDict_NoAudio">未找到同名 .mdd，无法播放发音</sys:String>
+    <sys:String x:Key="STranslate_Plugin_Translate_LocalDict_Duplicate">已在列表中</sys:String>
+    <sys:String x:Key="STranslate_Plugin_Translate_LocalDict_SelectDictionary">选择 MDX 词库</sys:String>
+
+</ResourceDictionary>

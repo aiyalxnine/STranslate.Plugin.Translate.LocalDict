@@ -1,0 +1,60 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net10.0-windows</TargetFramework>
+        <UseWPF>true</UseWPF>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <LangVersion>preview</LangVersion>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+        <GenerateDocumentationFile>false</GenerateDocumentationFile>
+        <DebugType>none</DebugType>
+        <Version>1.0.0</Version>
+        <Authors>aiyalxnine</Authors>
+        <RepositoryUrl>https://github.com/aiyalxnine/STranslate.Plugin.Translate.LocalDict</RepositoryUrl>
+        <!-- 插件目录需要带上自己的依赖（HtmlAgilityPack） -->
+        <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+        <!-- 宿主接口 DLL 所在目录，可用 -p:STranslateHome=... 覆盖 -->
+        <STranslateHome Condition="'$(STranslateHome)' == ''">$(LOCALAPPDATA)\STranslate\current</STranslateHome>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <!-- WPF 项目的隐式 using 不含 System.IO -->
+        <Using Include="System.IO" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <!-- 语言文件由宿主从插件目录按原样加载，不编译进程序集 -->
+        <Page Remove="Languages\*.xaml" />
+        <Content Include="Languages\*.*">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="icon.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <Content Include="plugin.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <!-- 许可证随插件包分发（含 HtmlAgilityPack 的 MIT 声明） -->
+        <Content Include="..\..\LICENSE" Link="LICENSE">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="..\..\THIRD-PARTY-NOTICES.md" Link="THIRD-PARTY-NOTICES.md">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+        <!-- 宿主已加载的程序集只参与编译，不随插件分发 -->
+        <Reference Include="STranslate.Plugin">
+            <HintPath>$(STranslateHome)\STranslate.Plugin.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" ExcludeAssets="runtime" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.9" ExcludeAssets="runtime" />
+        <PackageReference Include="iNKORE.UI.WPF.Modern" Version="0.10.2.1" ExcludeAssets="runtime" />
+        <PackageReference Include="HtmlAgilityPack" Version="1.12.4" />
+    </ItemGroup>
+
+</Project>

@@ -1,0 +1,10 @@
+{
+  "PluginID": "7cc19a9119a3437e85dfc87ce6d9261e",
+  "Name": "本地词典",
+  "Description": "离线查询本地 MDX 词库：结构化显示音标、释义和例句，并可播放 MDD 中的真人发音",
+  "Author": "aiyalxnine",
+  "Version": "1.0.0",
+  "Website": "https://github.com/aiyalxnine/STranslate.Plugin.Translate.LocalDict",
+  "ExecuteFileName": "STranslate.Plugin.Translate.LocalDict.dll",
+  "IconPath": "icon.png"
+}
