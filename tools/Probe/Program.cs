@@ -4,7 +4,14 @@ using STranslate.Plugin.Translate.LocalDict.Core;
 using STranslate.Plugin.Translate.LocalDict.Mdict;
 
 Console.OutputEncoding = Encoding.UTF8;
-var mode = args[0];
+var mode = args.Length > 0 ? args[0] : "selftest";
+
+// 不依赖真实词库的自动测试（CI 使用）
+if (mode == "selftest")
+{
+    Environment.ExitCode = SelfTest.Run();
+    return;
+}
 
 if (mode == "ripemd")
 {

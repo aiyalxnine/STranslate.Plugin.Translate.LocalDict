@@ -81,7 +81,13 @@ tools/
   HostSmoke/    按 STranslate 的方式加载插件：查词、取发音、渲染设置界面和结果预览
 ```
 
-测试工具用法：
+自动测试（自带合成词库，不需要真实词典，CI 也运行它）：
+
+```powershell
+dotnet run --project tools/Probe -c Release -- selftest
+```
+
+用真实词库排查问题：
 
 ```powershell
 # 结构化解析结果
@@ -93,6 +99,10 @@ dotnet run --project tools/HostSmoke -c Release -- artifacts/out <词库.mdx> se
 # 按宿主模板复刻渲染查询结果
 dotnet run --project tools/HostSmoke -c Release -- preview artifacts/out <词库.mdx> previews record hello
 ```
+
+## 参与贡献
+
+欢迎 Issue 和 PR，请先阅读 [CONTRIBUTING.md](CONTRIBUTING.md)。
 
 ## 致谢
 

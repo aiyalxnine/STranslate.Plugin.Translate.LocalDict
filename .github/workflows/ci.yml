@@ -1,0 +1,75 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+# 只读权限：来自 fork 的 PR 也不会拿到写权限或密钥
+permissions:
+  contents: read
+
+jobs:
+  build-test:
+    runs-on: windows-latest
+    timeout-minutes: 20
+    env:
+      STRANSLATE_VERSION: 2.0.10
+      # 官方发布包与其中接口 DLL 的 SHA-256，防止下载内容被替换
+      STRANSLATE_PKG_SHA256: FED8A53204FA80D6599497B05C4BE1A56052BBCD84954B0D6613D5E57EFD5B80
+      STRANSLATE_PLUGIN_DLL_SHA256: 68DB8D1ECF0D74FE3CBA379446F427224A1A28B3DE0640A8A8424B888B238305
+      DOTNET_NOLOGO: true
+      DOTNET_CLI_TELEMETRY_OPTOUT: true
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Cache STranslate package
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ runner.temp }}/stranslate-pkg
+          key: stranslate-${{ env.STRANSLATE_VERSION }}-full
+
+      - name: Extract STranslate.Plugin.dll from the official release
+        shell: pwsh
+        run: |
+          $pkgDir = Join-Path $env:RUNNER_TEMP 'stranslate-pkg'
+          $pkg = Join-Path $pkgDir "STranslate-$env:STRANSLATE_VERSION-full.nupkg"
+          New-Item -ItemType Directory -Force $pkgDir | Out-Null
+          if (-not (Test-Path $pkg)) {
+            Invoke-WebRequest "https://github.com/STranslate/STranslate/releases/download/v$env:STRANSLATE_VERSION/STranslate-$env:STRANSLATE_VERSION-full.nupkg" -OutFile $pkg
+          }
+          if ((Get-FileHash $pkg -Algorithm SHA256).Hash -ne $env:STRANSLATE_PKG_SHA256) { throw 'STranslate 发布包哈希不符' }
+
+          $stHome = Join-Path $env:RUNNER_TEMP 'stranslate'
+          New-Item -ItemType Directory -Force $stHome | Out-Null
+          Add-Type -AssemblyName System.IO.Compression.FileSystem
+          $zip = [System.IO.Compression.ZipFile]::OpenRead($pkg)
+          try {
+            $entry = $zip.Entries | Where-Object FullName -eq 'lib/app/STranslate.Plugin.dll'
+            [System.IO.Compression.ZipFileExtensions]::ExtractToFile($entry, (Join-Path $stHome 'STranslate.Plugin.dll'), $true)
+          } finally { $zip.Dispose() }
+          if ((Get-FileHash (Join-Path $stHome 'STranslate.Plugin.dll') -Algorithm SHA256).Hash -ne $env:STRANSLATE_PLUGIN_DLL_SHA256) { throw 'STranslate.Plugin.dll 哈希不符' }
+          "STRANSLATE_HOME=$stHome" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+
+      - name: Build and package plugin
+        shell: pwsh
+        run: ./build.ps1 -STranslateHome $env:STRANSLATE_HOME
+
+      - name: Self test (synthetic dictionaries)
+        run: dotnet run --project tools/Probe -c Release -- selftest
+
+      - name: Build host smoke tool
+        shell: pwsh
+        run: dotnet build tools/HostSmoke -c Release "-p:STranslateHome=$env:STRANSLATE_HOME"
+
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: spkg
+          path: artifacts/*.spkg
+          if-no-files-found: error
